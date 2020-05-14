@@ -16,7 +16,7 @@ import "./config/global.js"; // 引全局路径
 import axios from 'axios'
 Vue.prototype.$http = axios;
 Vue.prototype.$echarts = echarts
-axios.defaults.baseURL = "http://192.168.1.166/";
+axios.defaults.baseURL = "http://192.168.1.168/";
 // axios.defaults.baseURL = "http://127.0.0.1/";
 // BASE_URL = "http://192.168.1.134/";
 // axios.defaults.baseURL = "http://ruanjian.chinadingao.com/"; //线上

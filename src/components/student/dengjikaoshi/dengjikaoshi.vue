@@ -43,14 +43,18 @@
                 <li @click="toPath(7)">
                   <img src="../../../assets/image/index/siji (5).png" alt="">
                 <span>考研</span>
-              </li>   
+              </li> 
+              <li @click="toPath(9)" :class="isHasB == false?'block':''">
+                  <img src="../../../assets/image/index/ry.png" alt="">
+                  <span>日语</span>
+              </li>        
                 <!-- isHasA == false?open2(): -->
-                <li @click="toPath(8)" :class="isHasA == false?'block':''">
+                <li @click="toPath(9)" :class="isHasA == false?'block':''">
                     <img src="../../../assets/image/index/siji (3).png" alt="">
                   <span>雅思</span>
                 </li>
                 <!-- isHasB == false?open2(): -->
-                <li @click="toPath(9)" :class="isHasB == false?'block':''">
+                <li @click="toPath(10)" :class="isHasB == false?'block':''">
                     <img src="../../../assets/image/index/siji (2).png" alt="">
                   <span>托福</span>
                 </li>                         
@@ -131,7 +135,7 @@ export default {
         toPath(val){
       // localStorage.setItem("type", type); // 存试卷类型
          localStorage.setItem("test_paper_type_id", val); // 存试卷类型
-         if(val==5||val==6||val==7||val==8||val==9){
+         if(val==5||val==6||val==7||val==8||val==9||val==10){
           // 
           this.$message({message:'学校没有开通此题库请联系我们申请开通',type: "error",duration: 2000,offset:90});
           return

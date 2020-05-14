@@ -10,6 +10,11 @@
         <el-table-column prop="test_paper_type_name" label="所属题库">
           <template slot-scope="scope">{{tesPaperTypeName(scope.row.test_paper_type_name)}}</template>
         </el-table-column>
+        <el-table-column  label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary" @click="look(scope.row)">查看详情</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
 
@@ -23,6 +28,11 @@
         :total="tableData.length"
       ></el-pagination>
     </div>
+<!-- 查看详情的对话框 -->
+    <el-dialog  title="问题" :visible.sync="dialogVisible"  width="50%">
+        <div  style="padding:10px;box-sizing:border-box" v-html="lookData.jiexi"></div>
+        <div  style="padding:10px;box-sizing:border-box;margin:10px 0" v-html="lookData.beixuanxiang"></div>
+  </el-dialog>
   </div>
 </template>
 
@@ -33,10 +43,15 @@ export default {
   props: ["paperId", "paperName"],
   data() {
     return {
+      dialogVisible:false,
       tableData: [],
       isLoading: false,
       pagesize: 15,
       currentPage: 1,
+      lookData:{
+        beixuanxiang:'',
+        jiexi:''
+      }
     };
   },
   created() {
@@ -47,6 +62,11 @@ export default {
   },
   computed: {},
   methods: {
+    look(val){
+      this.dialogVisible=true
+      this.lookData.jiexi=val.jiexi
+      this.lookData.beixuanxiang=val.beixuanxiang
+    },
     handleSizeChange(val) {
       this.pagesize = val;
     },

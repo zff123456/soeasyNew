@@ -32,8 +32,8 @@
               </div>
              </div>
           </div>
-          <el-dialog   :title="titleName" :visible.sync="dialogVisible"  class="zhuceForm"    width="30%"  >
-            <el-form  ref="form"  >
+          <el-dialog   :title="titleName" :visible.sync="dialogVisible"  class="zhuceForm"    width="30%"    @close="zhuceDialogClosed" >
+            <el-form  ref="zhuceformRef"  >
                 <el-form-item  > 
                     选择身份：               
                     <el-radio-group v-model="radio" @change="checked">
@@ -86,12 +86,12 @@
           </span>
         </el-dialog>
         <!--申请试用的弹框-->  
-        <el-dialog      :visible.sync="dialogshow"       width="45%"  >
-           <div class="shengqing-box">
+        <el-dialog      :visible.sync="dialogshow"    @close="shenqingDialogClosed"         width="45%"  >
+           <div class="shengqing-box"  >
             <div class="left-img">
               <img src="../assets/image/index/shenqing.png" alt="">
             </div>
-            <el-form ref="shenqingForm"  class="right-box"   :rules="shenqingFormRules">
+            <el-form ref="shenqingFormRef"  class="right-box"  :model="shenqingForm"  >
               <el-form-item >
                <div  class="itemName">申请试用</div>
             </el-form-item >
@@ -127,6 +127,37 @@
       import qs from "qs";
       export default {
           data() {
+
+    var checkPeople = (rule, value, cb) => {
+      // 验证正整数的规则表达式
+      const regPeople= /^[+]{0,1}(\d+)$/
+      if (regPeople.test(value)) {
+        // 正整数
+        return cb()
+      }
+      cb(new Error('请输入正整数'))
+    }
+     // 姓名的规则
+   var checkShiming = (rule, value, cb) => {
+      // 验证姓名的规则表达式
+      const regShiming= /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/
+      if (regShiming.test(value)) {
+        // 正整数
+        return cb()
+      }
+      cb(new Error('请输入真实姓名'))
+    }
+    // 验证手机号的规则
+    var checkMobile = (rule, value, cb) => {
+      // 验证手机号的正则表达式
+      const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+
+      if (regMobile.test(value)) {
+        return cb()
+      }
+      cb(new Error('请输入合法的手机号'))
+    }
+
               return {
                 count:60,
                 show:true,
@@ -144,6 +175,7 @@
                      id: '1',
                     name: '学生'
                   }],
+                  // 登录的验证规则
                   formRules: {
                     username: [{  required: true,  message: '请输入登录账号',  trigger: 'blur'
                       }, { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}],
@@ -165,7 +197,7 @@
 				        // 班级
                 classList:[], 
                 classes:'',
-                // 真实姓名
+                // 注册真实姓名
                 shiming:'',
                 // 注册账号
                 zhanghao:'',
@@ -196,56 +228,76 @@
                 people:[],
                 peopleName:'',
                 peopleNum:'',
-                shenqingFormRules: {
-                  schoolName: [{ required: true,  message: '请输入登录账号',  trigger: 'blur'
-                      }, { min: 5, max: 20, message: '长度在 5 到 20 个字符', trigger: 'blur'}],
-                      nickName: [{ required: true, message: '请输入登录密码', trigger: 'blur'
-                      }, { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }],
-                  } ,
+                // 申请表单的验证规则
+                // shenqingFormRules: {
+                //      schoolName: [{ required: true,  message: '请输入学校名称',  trigger: 'blur'
+                //       },{ min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur'}],
+                //       people:[{ required: true, message: '请输入使用人数', trigger: 'blur'
+                //        }, { validator: checkPeople, trigger: 'blur' }],
+                //       nickName: [{ required: true, message: '请输入真实姓名', trigger: 'blur'
+                //       },{ validator: checkShiming, trigger: 'blur' }],
+                //       phone:[{ required: true, message: '请输入手机号', trigger: 'blur'
+                //        }, { validator: checkMobile, trigger: 'blur' }],
+                //        beizhu:[{ required: true, message: '请输入备注信息', trigger: 'blur'
+                //        },{ min: 1, max: 50, message: '长度在 1 到 100 个字符', trigger: 'blur'}]
+                //   } ,
               }
           },
         
-          created: function() {   
+     created: function() {   
              this.getShengshi();
              console.log(this.radio);
-             this.getPeopleList()            
+            //  this.getPeopleList()            
           },
-          methods: {
-            // 获取销售人员
-         async   getPeopleList(){
-          const res = await this.$http.post("v1/Sale/salelst")
-          console.log(res);
-          if (res.status === 200&& res.data.code==1) {
-             this.peopleList=res.data.info
-          }
-          
-            },
-            checkpeople(val){
-              console.log(val);
-              this.people=val
-              this.peopleName=this.people[0]
-              this.peopleNum=this.people[1]
-             
-            },
+    methods: {
+            // 监听注册表单对话框的关闭事件
+      zhuceDialogClosed() {
+        this.shengList= []
+        this.chengshiList= []
+        this.schoolList=[]
+        this.tracherList=[]
+        this.classList=[]
+        this.sheng= ""
+        this.chengshi=""
+        this.school=""
+        this. tracher=""
+        this.classes=""
+        this.school_name=""
+        this.school_id=""
+        this.teacher_id=""
+        this.teacher_name= ""
+        this.class_id=""
+        this.class_name=""  
+        this.shiming="" 
+        this.zhanghao=""
+        this.psw=""
+        this.paw=""               
+         },
+         // 监听申请试用表单对话框的关闭事件
+         shenqingDialogClosed() {
+              this.shenqingForm.schoolName=""
+              this.shenqingForm.people="",
+              this.shenqingForm.nickName=""
+              this.shenqingForm.phone=""  
+              this.shenqingForm.beizhu=" "
+         },
             // 申请使用
          async   shengqing(){
-          //  console.log(this.peopleName,1);
-           
-          // if (this.peopleName=="") {
-          //      this.$message({ message: "请选择销售人员",  type: "warning",  duration: 2000 });
-          //             return false;
-          //       }
-              if (this.shenqingForm.schoolName.trim() == "") {
+              if (this.shenqingForm.schoolName.trim()=="") {
                     this.$message({ message: "请输入学校名称",  type: "warning",  duration: 2000 ,offset:90});
                       return false;
                 }
-              if (this.shenqingForm.people.trim()=="") {
-                      this.$message({  message: "请填写试用人数",   type: "warning",   duration: 2000,offset:90
-                  });
+                // 正整数的验证验证表达式
+              const regPeople= /^[+]{0,1}(\d+)$/
+              if (!regPeople.test(this.shenqingForm.people)){
+                      this.$message({  message: "请填写试用人数/正整数",   type: "warning",   duration: 2000,offset:90
+                });
                       return false;
              }
-             if (this.shenqingForm.nickName.trim()=="") {
-                      this.$message({message: "请填写您的姓名",  type: "warning",   duration: 2000,offset:90
+            //  真实姓名的正则表达式
+              const regShiming= /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/
+             if (!regShiming.test(this.shenqingForm.nickName)) {
+                  this.$message({message: "请填写您的姓名",  type: "warning",   duration: 2000,offset:90
                });
                       return false;
              }
@@ -254,13 +306,11 @@
               this.$message({ message: "手机号不正确",  type: "warning",   duration: 2000,offset:90 });
                   return false;
             }
-            if (this.shenqingForm.beizhu.trim() == "") {
-                      this.$message({  message: "请填写备注信息",  type: "warning",  duration: 2000,offset:90
+            if (this.shenqingForm.beizhu.trim()=="") {
+                  this.$message({  message: "请填写备注信息",  type: "warning",  duration: 2000,offset:90
               });
-                      return false;
+                 return false;
              }
-            //  sale_name:this.peopleName,
-            //     sale_phone:this.peopleNum,
              const res = await this.$http.post( "v1/Sale/addSchoolApplication",qs.stringify({
                 school_name:this.shenqingForm.schoolName,
                 user_num:this.shenqingForm.people,
@@ -367,13 +417,11 @@
               localStorage.setItem("school_name", res.data.info.school_name); // 学校名称
               localStorage.setItem("school_id", res.data.info.school_id); // 学校id
               this.$router.push('/welcome')  
-                     //  
-              this.username=" ";
-              this.password=" "
+              this.username="";
+              this.password=""
               }else {
                 this.$message({ message:res.data.info, type: "error",   duration: 2000 ,offset:90 }); 
               }
-                // this.$message({ message:res.data.info, type: "error",   duration: 2000 ,offset:90 });  
                 return false              
             }   
 
@@ -384,11 +432,11 @@
           this.$router.push('/forgetPas') 
        },
        nameInput(){
-        var unameReg = /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/
-            if (!unameReg.test(this.shiming)) {
-                 this.$message({ message: "请输入真实姓名", type: "warning", duration: 2000  ,offset:90 });
-                 return false;
-            }
+        // var unameReg = /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/
+        //     if (!unameReg.test(this.shiming)) {
+        //          this.$message({ message: "请输入真实姓名", type: "warning", duration: 2000  ,offset:90 });
+        //          return false;
+        //     }
        },
               // 注册
       async    zhuce() {
@@ -438,7 +486,7 @@
                     this.$message({ message: "请输入注册密码", type: "warning", duration: 2000 ,offset:90  });
                      return false;
               }
-              if (  this.psw.replace(/\s*/g,"").length < 6 || this.psw.replace(/\s*/g,"").length > 20 ) {
+              if (this.psw.replace(/\s*/g,"").length < 6 || this.psw.replace(/\s*/g,"").length > 20 ) {
                     this.$message({ message: "密码长度为6-20位", type: "warning", duration: 2000  ,offset:90 });
                     return false;
              }
@@ -477,10 +525,9 @@
                 this.teacher_name= ""
                 this.class_id= ""
                 this.class_name=""  
-                this.shiming=" " 
-                // this.shiming=""
+                this.shiming="" 
                 this.zhanghao=""
-                this.psw=" "
+                this.psw=""
                 this.paw=""              
               }else{
                 this.$message({ message: res.data.info,   type: "warning",   duration: 2000 ,offset:90  });
@@ -546,27 +593,26 @@
                 this.school=""
                 this.school_name=""
                 this.school_id=""
-                this.shiming=" " 
-                // this.shiming=""
+                this.shiming="" 
+                this.shiming=""
                 this.zhanghao=""
-                this.psw=" "
+                this.psw=""
                 this.paw=""
               }else {
                 this.$message({ message:res.data.info, type: "error", duration: 2000  ,offset:90 });
-              }
-             
+              }           
               }
               if(this.radio==3){
                 var unameReg = /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/
-                 if (!unameReg.test(this.shiming)) {
+                 if (!unameReg.test(this.shiming)){
                     this.$message({ message: "请输入真实姓名", type: "warning", duration: 2000  ,offset:90 });
                      return false;
                  }
-                  if (this.zhanghao.replace(/\s*/g,"") == ""||this.zhanghao.trim().length<2) {
+                  if (this.zhanghao.replace(/\s*/g,"") == ""||this.zhanghao.trim().length<2){
                     this.$message({ message: "账号长度为2位以上", type: "warning", duration: 2000  ,offset:90 });
                      return false;
                 }
-               if (this.psw.replace(/\s*/g,"") == "") {
+               if (this.psw.replace(/\s*/g,"") == ""){
                      this.$message({ message: "请输入注册密码", type: "warning", duration: 2000  ,offset:90 });
                      return false;
                }
@@ -578,18 +624,18 @@
                 this.$message({ message: "两次密码不同", type: "warning", duration: 2000  ,offset:90 });
                     return false;
               }
-              const res = await this.$http.post("v1/Userlogin/SociologyUserRegister",qs.stringify({
-                 nickname:this.shiming,
-                 name:this.zhanghao,
-                 password:this.psw
-              }));
+              // const res = await this.$http.post("v1/Userlogin/SociologyUserRegister",qs.stringify({
+              //    nickname:this.shiming,
+              //    name:this.zhanghao,
+              //    password:this.psw
+              // }));
               console.log(res);
               if(res.status==200 && res.data.code =="1"){
                 this.$message({ message: res.data.info, type: "success", duration: 2000  ,offset:90 });
                 this.dialogVisible=false
-                this.shiming=" " 
+                this.shiming="" 
                 this.zhanghao=""
-                this.psw=" "
+                this.psw=""
                 this.paw=""
                 
               }else {

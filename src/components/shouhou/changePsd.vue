@@ -3,9 +3,7 @@
      <div class="centers">
         <!-- <el-card> -->
             <div class="form-boxes">
-                <el-form
-                  label-width="100px"
-                  class="demo-ruleForm"> 
+                <el-form    label-width="100px"     class="demo-ruleForm"> 
                   <el-form-item label="姓名">
                     <el-input v-model="nickName" style="width:200px;margin-left:10px"   disabled></el-input>
                   </el-form-item>
@@ -112,6 +110,8 @@
     height: 100%;
     overflow: hidden;
     padding-top:61px;
+
+    
     .form-boxes {
       width: 600px;
       text-align: left;

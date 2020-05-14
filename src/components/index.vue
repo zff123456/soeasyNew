@@ -39,7 +39,7 @@
                </div> 
             </el-menu>  
             
-            <el-menu  :default-active="activerouter" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#fff"   v-if="identify==1"  active-text-color="#409EFF">                
+            <el-menu  :default-active="activerouter" class="el-menu-demo" mode="horizontal"  @select="handleSelect" background-color="#fff"   v-if="identify==1"  active-text-color="#409EFF">                
               <img src="../assets/image/index/tb.png" alt="" style=" float:left; margin:10px 20px;width:40px;height:40px;">    
            <el-menu-item index="stuwelcome">
                <img src="../assets/image/index/shouye.png" alt="" style="width:18px;height:18px;">    
@@ -56,19 +56,18 @@
              <el-menu-item index="onlinecourse">我校课程</el-menu-item>
              <el-menu-item index="xitongziyuan">系统课程</el-menu-item>                 
            </el-submenu>
-           <!-- <el-menu-item index=""></el-menu-item> -->
            <el-submenu index="1">
              <template slot="title">专项训练</template>
              <el-menu-item index="tinglixunlian">听力训练</el-menu-item>
              <el-menu-item index="xiezuoxunlian">写作训练</el-menu-item>
              <el-menu-item index="dancixunlian">单词训练</el-menu-item> 
-             <el-menu-item index="fanyixunlian"> 翻译训练</el-menu-item>    
-             <el-menu-item index="kouyuxunlian"> 口语训练</el-menu-item>               
+             <el-menu-item index="fanyixunlian">翻译训练</el-menu-item>    
+             <el-menu-item index="kouyuxunlian">口语训练</el-menu-item>               
            </el-submenu>
            <el-menu-item index="cuotijijin">错题集锦</el-menu-item>
            <!-- <el-menu-item index="stufourlist">历年真题</el-menu-item>
-           <el-menu-item index="onlinemoni">在线模拟</el-menu-item>
-           <el-menu-item index="tikulianxi">题库练习</el-menu-item> -->
+           <el-menu-item index="onlinemoni">在线模拟</el-menu-item> -->
+           <el-menu-item index="tikulianxi">题库练习</el-menu-item>
            <el-menu-item index="wuzhihua">无纸化考试</el-menu-item>
            <el-submenu index="2">
             <template slot="title">数据分析</template>
@@ -138,6 +137,7 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         });
+        // window.localStorage.clear()
         // 退出登录逻辑：      
         localStorage.removeItem("identity");
         localStorage.removeItem("shenfen");
@@ -147,7 +147,7 @@ export default {
         localStorage.removeItem("nickname");
         this.$router.push("/");
       } catch (e) {
-        this.$message({ type: "info",  message: "已取消退出",offset:90 });
+        this.$message({ type:"info",  message:"已取消退出",offset:90 });
       }
           // this.$router.     ('/')
       }

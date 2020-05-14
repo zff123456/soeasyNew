@@ -10,6 +10,11 @@
         <el-table-column prop="test_paper_type_name" label="所属题库">
           <template slot-scope="scope">{{tesPaperTypeName(scope.row.test_paper_type_name)}}</template>
         </el-table-column>
+        <el-table-column prop="xuanxiang" label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary"  size="mini" @click="look(scope.row)">查看详情</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
 
@@ -23,6 +28,18 @@
         :total="tableData.length"
       ></el-pagination>
     </div>
+
+    <!-- 查看详情的对话框 -->
+
+<el-dialog   title="问题"   :visible.sync="lookDialogVisible"    width="50%">
+    <div    style="padding:10px;margin:10px 0;">{{lookData.wenti}}</div>
+    <div    v-for="item in lookData.xuanxiang"   style="padding:10px;margin:10px 0;">
+      <ul>
+        <li v-html="item"  style="margin:10px 0;" ></li>
+      </ul>
+    </div>
+    <div   >答案：{{lookData.daan}}</div>
+</el-dialog>
   </div>
 </template>
 
@@ -33,10 +50,16 @@ export default {
   props: ["paperId", "paperName"],
   data() {
     return {
+      lookDialogVisible:false,
       tableData: [],
       isLoading: false,
       pagesize: 15,
       currentPage: 1,
+      lookData:{
+        daan:'',
+        xuanxiang:[],
+        wenti:'',
+      }
     };
   },
   created() {
@@ -47,6 +70,16 @@ export default {
   },
   computed: {},
   methods: {
+    look(val){
+      console.log(val);
+      this.lookData.daan=val.daan
+      this.lookData.wenti=val.wenti
+      this.lookData.xuanxiang=val.xuanxiang.split(",|")
+      console.log(this.lookData);
+      
+      this.lookDialogVisible=true
+
+    },
     handleSizeChange(val) {
       this.pagesize = val;
     },

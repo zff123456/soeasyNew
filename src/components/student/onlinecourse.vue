@@ -44,6 +44,13 @@ export default {
     },
     methods: {
         tovideo(val){
+                localStorage.setItem('obj',val)
+                localStorage.setItem('videoschool',val.school)
+                localStorage.setItem('videosrc',val.url)
+                localStorage.setItem('videotitle',val.title)
+                localStorage.setItem('videoteahcer',val.teacher)
+                localStorage.setItem('videoshuji',val.shuji)
+            // window.localStorage
                 this.$router.push({
                     name:'stucoursedetail',
                     params: {

@@ -2,45 +2,66 @@
   <div class="right" style="margin-top:60px;">
     <!-- 代办理事项 -->
       <div class="navs">
-               <div class="nav-item" @click="goto(5)">
+               <!-- <div class="nav-item" @click="goto(5)">
                    <div class="top_item">
                       <img :src="require('@/assets/image/qusetionlist/danci.png')" >
                       <div class="list-item" :class="{'active':selected==5}">单词列表</div>
                    </div>
+               </div> -->
+               <!-- <div class="nav-item" @click="goto(5)">
+                <div class="top_item">
+                  <div class="item-left">
+                      <img :src="require('@/assets/image/qusetionlist/danci.png')" >                     
+                  </div>
+                  <div class="list-item" :class="{'active':selected==5}">单词列表</div>
+                </div>
+            </div> -->
+             <div class="nav-item"  @click="goto(1)">
+                <div class="top_item">
+                 <div class="item-left">
+                   <img  :src="require('@/assets/image/qusetionlist/four.png')" >                    
                </div>
-                <div class="nav-item"  @click="goto(1)">
-                   <div class="top_item">
-                    <img  :src="require('@/assets/image/qusetionlist/four.png')" >
-                    <div  class="list-item" :class="{'active':selected==1}">四级列表</div>
-                   </div>
+               <div  class="list-item" :class="{'active':selected==1}">四级列表</div>
+                
                 </div>
-                <div class="nav-item"  @click="goto(2)">
-                   <div class="top_item">
-                    <img  :src="require('@/assets/image/qusetionlist/six.png')" >
-                    <div class="list-item" :class="{'active':selected==2}">六级列表</div>
-                   </div>
+             </div>
+             <div class="nav-item"  @click="goto(2)">
+                <div class="top_item">
+                  <div class="item-left">
+                   <img  :src="require('@/assets/image/qusetionlist/six.png')" >
+                  </div>
+                
+                 <div class="list-item" :class="{'active':selected==2}">六级列表</div>
                 </div>
-                <div class="nav-item"  @click="goto(3)">
-                   <div class="top_item">
-                      <img  :src="require('@/assets/image/qusetionlist/a.png')" >
-                      <div class="list-item" :class="{'active':selected==3}">A级列表</div>
-                   </div>
+             </div>
+             <div class="nav-item"  @click="goto(3)">
+                <div class="top_item">
+                  <div class="item-left">
+                   <img  :src="require('@/assets/image/qusetionlist/a.png')" >
+                  </div>
+                  
+                   <div class="list-item" :class="{'active':selected==3}">A级列表</div>
                 </div>
-                 <div class="nav-item"  @click="goto(4)">
-                    <div class="top_item">
-                      <img  :src="require('@/assets/image/qusetionlist/b.png')" >
-                      <div class="list-item" :class="{'active':selected==4}">B级列表</div>
+             </div>
+              <div class="nav-item"  @click="goto(4)">
+                 <div class="top_item">
+                   <div class="item-left">
+                     <img  :src="require('@/assets/image/qusetionlist/b.png')" >
                     </div>
-                </div>
-            </div>
+                   
+                   <div class="list-item" :class="{'active':selected==4}">B级列表</div>
+                 </div>
+             </div>
+         </div>
+            <!-- </div> -->
   
     <!-- 表格数据 -->
     <div class="box-list">
-       <stufour v-if="selected==1"></stufour>
+        <stufour v-if="selected==1"></stufour>
         <stusix v-if="selected==2"></stusix>
         <stua v-if="selected==3"></stua>
         <stub v-if="selected==4"></stub>
-        <studanciList v-if="selected==5"></studanciList>
+        <!-- <studanciList v-if="selected==5"></studanciList> -->
     </div>
   </div>
 </template>
@@ -60,7 +81,7 @@ export default {
   },
   data() {
     return {
-      selected: 5,
+      selected: 1,
   
     };
   },
@@ -93,7 +114,7 @@ export default {
   -o-background-size: cover;
   background-position: center 0;
   padding-bottom: 30px;
-  overflow: auto;;
+  overflow: auto;
  
 }
 .data-box ul {
@@ -126,50 +147,45 @@ margin-left: 30px;
 }
 }
 
-.box-list{
-  /* // background-color: #fff; */
-}
 .navs{
-        display: flex;
-        justify-content: space-between;
+       display: flex;
+      justify-content: space-between;
         height: 100px;
        box-sizing: border-box;
-        /* // margin-top: 20px; */
-    }
+}
 .nav-item{
         width: 18%;
         box-sizing: border-box;
-        padding:0 1%;
         height: 100px;
         line-height: 100px;
         display: flex;
-        margin:0 2%;
+        margin:0 5%;
         border-radius: 10px;
         background-color:#fff;
-        text-align: center;
-        /* // margin: 2%;
-        // 
-       */
-        /* // background: #fff; */
         .top_item{
-            width: 80%;
-            margin-left: 10%;
-            }
-        img{
+          width:100%;
+        }
+        .item-left{
+          width: 50%;
           float: left;
-          width: 80px;
+          box-sizing:border-box;
+          img{
+          width:80px;
           height:80px;
-          /* margin:5%; */
-          /* // vertical-align: middle; */
-          margin:10px 0;
+          box-sizing:border-box;
+          margin:10px 15%;
         }
+
+        }
+      
 }
- .list-item{
-           font-size: 1.5em;
-           font-weight: bold;
-           color: #949494;
-           float: right;
-        }
+.list-item{
+          width:40%;
+          float: left;
+          font-size:1.5em;
+          font-weight: bold;
+          color: #949494;
+}
  .list-item.active{
   color:#FC9A52;
 }

@@ -3,12 +3,15 @@
   <div class="right" v-loading="isLoading" element-loading-text="拼命加载中">
     <div class="table-box">
       <el-table style="width: 100%" border="" stripe :data="flatten(tableData.slice((currentPage -1) * pagesize, currentPage * pagesize))" :row-style="{height:'48px'}"  :header-row-style="{height:'48px'}">
-        <el-table-column prop="id" label="Id" width="65"></el-table-column>
-        <el-table-column prop="test_paper_name" label="试卷名称">
+        <el-table-column prop="id" label="Id" width="65" align="center"></el-table-column>
+        <el-table-column prop="test_paper_name" label="试卷名称" align="center">
           <template slot-scope="scope">{{testPaperName(scope.row.test_paper_name)}}</template>
         </el-table-column>
-        <el-table-column prop="test_paper_type_name" label="所属题库">
+        <el-table-column prop="test_paper_type_name" label="所属题库" align="center">
           <template slot-scope="scope">{{tesPaperTypeName(scope.row.test_paper_type_name)}}</template>
+        </el-table-column>
+        <el-table-column prop="audio_url" label="音频地址"  min-width="160" align="center">
+          <!-- <template slot-scope="scope">{{tesPaperTypeName(scope.row.test_paper_type_name)}}</template> -->
         </el-table-column>
       </el-table>
     </div>

@@ -1,6 +1,7 @@
 <template>
     <div class="right">
       <div class="centers">
+        <audio ref="vide"></audio>
       <el-table :data="tableData2" style="width: 100%" border>
         <el-table-column type="index"  align="center" width="70">
         </el-table-column>
@@ -17,8 +18,8 @@
           </template>
         </el-table-column>
       </el-table> 
-      <div v-if="yuyinList.length!=0" >
-        <el-table :data="flatten(yuyinList.slice((currentPage -1) * pagesize, currentPage * pagesize))" style="width: 100%;margin-top:20px" border v-if="yuyinList !=[]">
+      <div    v-if="yuyinList.length>0" >
+        <el-table :data="flatten(yuyinList.slice((currentPage -1) * pagesize, currentPage * pagesize))" style="width: 100%;margin-top:20px" border   v-if="yuyinList !=[]">
           <el-table-column prop="addtime" label="训练时间" >
             <template slot-scope="scope">{{scope.row.addtime | time}}</template>
           </el-table-column>
@@ -49,8 +50,6 @@
         </audio>
         <el-button type="primary"   size="small" v-show="time =='点击说话(60秒)'"  @click ="mouseStart"><i class="el-icon-headset el-icon--right"></i>{{time}}</el-button>
         <el-button type="primary"   size="small" v-show="time !='点击说话(60秒)'"  @click ="mouseEnd"><i class="el-icon-headset el-icon--right"></i>{{time}}</el-button>
-        <!-- <el--button  @click ="mouseStart" icon="el-icon-headset"     type="info" style="margin:0.5rem 10%;width:80%" size="small" v-show="time =='点击说话(60秒)'">{{time}}</el--button> -->
-        <!-- <el--button @click ="mouseEnd" icon="play-circle-o" type="info" style="margin:0.5rem 10%;width:80%" size="small" v-show="time !='点击说话(60秒)'">{{time}}</el--button> -->
         <el-button   type="info" size="small" style="margin-left:26%;margin-top:0.4rem;"  @click="submit" :loading ="isLogin" >提交(提交最后一次语音录入)</el-button>
       </el-drawer>
     </div>          
@@ -65,7 +64,7 @@
   export default {
     data() {
       return {
-        tableData2: [{count:'1234'}], // 语音评测
+        tableData2: [{count:'1234',id:1},{count:'777',id:2},{count:'888',id:3},{count:'999',id:4}], // 语音评测
         pagesize: 10,
         currentPage: 1,
         titleId: '',
@@ -85,6 +84,9 @@
         wavUrl: '',
         videoSrc: '',
         yuyinList: [],
+        baseUrl:'http://ruanjian.chinadingao.com/',
+        audio_url:'uploads/20190807/6d336ae2a1455aa96e9be1fa69d36308.mp3',
+        activeId:0,
       };
     },
     created() {
@@ -127,9 +129,25 @@
         }
       },
       // 播放音频
-      playVideo(){
-
+      playVideo(item){
+        // this.speaks(item.text)
+        // console.log(item.text);
+        
+        this.$refs.vide.src = `${this.baseUrl}${item.audio_url}`;
+        this.$refs.vide.play();
+        
       },
+      // 文字转化为语音
+      speaks(item){
+          const synth = window.speechSynthesis
+		      let msg = new SpeechSynthesisUtterance("你好");
+	        console.log(msg)
+	        msg.rate = 3 //播放语速
+	        msg.pitch = 10 // 音调高低
+	        msg.text =item
+	        msg.volume = 0.5 //播放音量
+	        synth.speak(msg);
+        },
       clearTimer () {
         if (this.interval) {
           this.num = 60
@@ -191,19 +209,20 @@
           this.$http({
             header: ({'Content-Type': 'application/x-www-form-urlencodeed'}),
             method: 'POST',
-            url: 'admin/paper/updatafile',
+            url:'http://ruanjian.chinadingao.com/admin/paper/updatafile',
             data: fd,
             withCredentials: false,
           }).then((res) => {
             console.log(res)
             //  这里做登录拦截
             if (res.status === 200 && res.data.code === "1") {
-              this.wavUrl = res.data.info;
-              
+              this.wavUrl = res.data.info;             
               console.log("成功res:",res);
+              this.$message({ message:'上传成功', type: "success", duration: 4000,offset:90 })
               // this.$message({ message: res.data.info, type: "success", duration: 4000 });
             } else {
               console.log("失败res",res);
+              this.$message({ message:'上传未成功', type: "error", duration: 4000,offset:90 })
               // document.write("上传未成功",res)
               // this.$message({ message: res.data.info, type: "error", duration: 4000 });
             }
@@ -219,12 +238,11 @@
           return false;
         }
         this.isLogin = true;
-        const res = await this.$http.post(
-          "admin/index/pingce",
+        const res = await this.$http.post("http://ruanjian.chinadingao.com/admin/index/pingce",
           qs.stringify({ url: this.wavUrl ,count: this.count,u_id: this.stu_id, p_id :this.titleId})
         );
         if (res.status === 200 && res.data.code === "1") {
-          this.videoSrc = `${BASE_URL}${this.wavUrl}`;
+          this.videoSrc = `${this.baseUrl}${this.wavUrl}`;
           this.wavUrl = "";
           this.isLogin = false;
           console.log("提交1",res);
@@ -236,15 +254,34 @@
         }
       },
       async chakan(item) {
+        this.activeId=item.id  
+        this.yuyinList=[]  
+        if(item.id==1){
+          this.yuyinList=[{nickname:'张三',fenshu:15,time:"",id: 23,audio_url:"uploads/20190807/6d336ae2a1455aa96e9be1fa69d36308.mp3",text:'123'}]
+        }
+        if(item.id==2){
+          this.yuyinList=[{nickname:'张三',fenshu:10,time:"",id: 24,audio_url:"uploads/20190807/51b904e139fd85f2684ee5f7335ba687.mp3",text:'7777'} ]
+        }
+        if(item.id==3){
+          this.yuyinList=[{nickname:'张三',fenshu:18,time:"",id: 22,audio_url: "uploads/20190807/8596ef4e727dcb2a70f4b0b67f6b72ab.mp3",text:'888'} ]
+        }
+        if(item.id==4){
+          this.yuyinList=[{nickname:'张三',fenshu:18,time:"",id: 25,audio_url:"uploads/20190807/77dd83e949999bc0d604e86c4dcb84bd.mp3",text:'999'} ]
+        }
+        // this.yuyinList=[{nickname:'张三',fenshu:15,time:"",id: 23,audio_url:"uploads/20190807/6d336ae2a1455aa96e9be1fa69d36308.mp3",} ]
+      // },{nickname:'张三',fenshu:10,time:"",id: 24,audio_url:"uploads/20190807/51b904e139fd85f2684ee5f7335ba687.mp3",
+      //                  },{nickname:'张三',fenshu:18,time:"",id: 22,audio_url: "uploads/20190807/8596ef4e727dcb2a70f4b0b67f6b72ab.mp3",
+      //                  },{nickname:'张三',fenshu:18,time:"",id: 25,audio_url:"uploads/20190807/77dd83e949999bc0d604e86c4dcb84bd.mp3"}
         // const res = await this.$http.post( "http://ruanjian.chinadingao.com/admin/index/userpingcelst", qs.stringify({ p_id: item.id }) );
-        // if (res.status === 200 && res.data.code === "1") {
+        // if (res.status === 200  && res.data.code === "1") {
         //   this.yuyinList = res.data.info;
         // }
         // this.yuyinList=[{nickname:'张三',fenshu:15,time:""}]
 
       },
       delet(){
-        this.$message({ message: "此项权限尚未开放。", type: "error", duration: 4000 });
+
+        this.$message({ message: "此项权限尚未开放", type:"warning", duration: 4000,offset:90 });
       },
     }
   };

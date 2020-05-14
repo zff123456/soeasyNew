@@ -3,23 +3,29 @@
   <div class="right" v-loading="isLoading" element-loading-text="拼命加载中">
     <div class="table-box">
       <el-table style="width: 100%" border="" stripe :data="flatten(tableData.slice((currentPage -1) * pagesize, currentPage * pagesize))" :row-style="{height:'48px'}"  :header-row-style="{height:'48px'}">
-        <el-table-column prop="id" label="Id" width="65"></el-table-column>
-        <el-table-column prop="test_paper_name" label="试卷名称" width="260">
+        <el-table-column prop="id" label="Id" width="65" align="center"></el-table-column>
+        <el-table-column prop="test_paper_name" label="试卷名称" align="center">
           <template slot-scope="scope">{{testPaperName(scope.row.test_paper_name)}}</template>
         </el-table-column>
-        <el-table-column prop="test_paper_type_name" label="所属题库" width="100">
+        <el-table-column prop="test_paper_type_name" label="所属题库" width="100" align="center">
           <template slot-scope="scope">{{tesPaperTypeName(scope.row.test_paper_type_name)}}</template>
         </el-table-column>
-        <el-table-column prop="audio_url" label="音频地址" min-width="160"></el-table-column>
+        <el-table-column prop="audio_url" label="音频地址" min-width="160" align="center"></el-table-column>
+        <el-table-column  label="操作" width="100" align="center">
+          <template slot-scope="scope">
+            <el-button type="primary"  size="mini" @click="lookChecket(scope.row)">查看详情</el-button>
+            <!-- <div >查看详情</div> -->
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <!-- 嵌套表格dialog -->
     <div class="dialog-box">
-      <el-dialog title="问题列表" :visible.sync="dialogTableVisible" style="width:1000px;margin: 0 auto;margin-top:15vh;">
+      <el-dialog title="问题列表" :visible.sync="dialogTableVisible" width="50%">
         <el-table :data="innerList" :row-style="{height:'48px'}"  :header-row-style="{height:'48px'}">
           <el-table-column prop="id" label="Id" width="65"></el-table-column>
           <el-table-column property="wenti" label="问题"></el-table-column>
-          <el-table-column property="daan" label="答案"></el-table-column>
+          <el-table-column property="daan" label="答案" width="100"></el-table-column>
         </el-table>
       </el-dialog>
     </div>

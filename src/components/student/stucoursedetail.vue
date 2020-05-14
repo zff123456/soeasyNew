@@ -34,11 +34,21 @@ export default {
     },
     mounted() {
     console.log(this.$route.params);
-    this.obj.title=this.$route.params.title
-    this.obj.shuji=this.$route.params.shuji
-    this.obj.teacher= this.$route.params.teacher
-    this.obj.school= this.$route.params.school
-    this.obj.url= this.$route.params.url
+    // this.obj.title=this.$route.params.title
+    // this.obj.shuji=this.$route.params.shuji
+    // this.obj.teacher= this.$route.params.teacher
+    // this.obj.school= this.$route.params.school
+    // this.obj.url= this.$route.params.url
+    this.obj.school=localStorage.getItem('videoschool')
+    // console.log(localStorage.getItem('videoschool'));
+    this.obj.url=localStorage.getItem('videosrc')
+    // console.log( localStorage.getItem('videosrc'));
+    this.obj.title= localStorage.getItem('videotitle')
+    // console.log( localStorage.getItem('videotitle'));
+    this.obj.teacher=localStorage.getItem('videoteahcer')
+    // console.log(  localStorage.getItem('videoteahcer'));            
+    this.obj.shuji= localStorage.getItem('videoshuji')
+   console.log(  localStorage.getItem('videoshuji'));
 
     },
     methods: {

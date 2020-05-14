@@ -4,12 +4,26 @@
     <div class="table-box">
       <el-table style="width: 100%" border="" stripe :data="flatten(tableData.slice((currentPage -1) * pagesize, currentPage * pagesize))" :row-style="{height:'48px'}"  :header-row-style="{height:'48px'}">
         <el-table-column prop="id" label="Id" width="65"></el-table-column>
-        <el-table-column prop="test_paper_name" label="试卷名称">
+        <el-table-column prop="test_paper_name" label="试卷名称"  min-width="120">
           <template slot-scope="scope">{{testPaperName(scope.row.test_paper_name)}}</template>
         </el-table-column>
         <el-table-column prop="test_paper_type_name" label="所属题库">
           <template slot-scope="scope">{{tesPaperTypeName(scope.row.test_paper_type_name)}}</template>
         </el-table-column>
+        <el-table-column prop="wenti" label="问题"   min-width="160">
+          <!-- <template slot-scope="scope">{{tesPaperTypeName(scope.row.test_paper_type_name)}}</template> -->
+        </el-table-column>
+        <el-table-column prop="xuanxiang" label="选项">
+          <template slot-scope="scope">
+            <span  v-for="item in  scope.row.xuanxiang.split(',|') ">{{item}} </span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="daan" label="答案"  width="100"  ></el-table-column>
+        <!-- <el-table-column  label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary" @click="look(scope.row)">查看详情</el-button>
+          </template>
+        </el-table-column> -->
       </el-table>
     </div>
 
@@ -23,6 +37,19 @@
         :total="tableData.length"
       ></el-pagination>
     </div>
+
+    
+<el-dialog title="问题"  :visible.sync="dialogVisible"   width="50%">
+  <div    style="padding:10px;margin:10px 0;">{{lookData.wenti}}</div>
+  <div    v-for="item in lookData.xuanxiang"   style="padding:10px;margin:10px 0;">
+    <ul>
+      <li v-html="item"   ></li>
+    </ul>
+  </div>
+  <div  style="margin:10px 0">答案：{{lookData.daan}}</div>
+  <div  v-html="lookData.jiexi"  style="margin:10px 0;"></div>
+  <div  v-html="lookData.yiwen"  style="margin:15px 0;"></div>
+</el-dialog>
   </div>
 </template>
 
@@ -33,6 +60,14 @@ export default {
   props: ["paperId", "paperName"],
   data() {
     return {
+      dialogVisible:false,
+      lookData:{
+        wenti:'',
+        xuanxiang:[],
+        jiexi:'',
+        daan:'',
+        yiwen:''
+      },
       tableData: [],
       isLoading: false,
       pagesize: 15,
@@ -47,6 +82,14 @@ export default {
   },
   computed: {},
   methods: {
+    look(val){
+      this.dialogVisible=true
+        this.lookData.wenti=val.wenti
+        this.lookData.jiexi=val.jiexi
+        this.lookData.xuanxiang=val.xuanxiang.split(",|")
+        this.lookData.daan=val.daan
+        this.lookData.yiwen=val.yiwen
+    },
     handleSizeChange(val) {
       this.pagesize = val;
     },

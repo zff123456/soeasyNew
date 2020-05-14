@@ -121,17 +121,17 @@
   .right {
     padding-top: 80px;
     min-height: 100%;
-   padding-bottom:50px;
-    background:url(../../assets/image/creatshijuan/bg.png) no-repeat   ;
+   /* padding-bottom:50px;
+    background:url(../../assets/image/creatshijuan/bg.png) no-repeat   ; */
     width:100%;
     height:100%;
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat;
     background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
     background-position: center 0;
-    overflow:auto;
-    /* background-color: #f0f0f0; */
+    overflow:auto; */
+    background-color: #f0f0f0;
     .centers{
       width: 96%;
       margin:0 auto;

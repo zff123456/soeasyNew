@@ -6,7 +6,7 @@
        <div class="header" style="padding-top:10px;">
            <el-button type="warning"  plain v-for="(item,key) in fourList" :key="key"  style="border:none; " @click="cheched(1,item)" > {{item}} </el-button>
        </div>
-        <div class="content" style="background-color: #fff;">
+        <div class="content" >
             <div class="content-box" v-if="problem == '作文' || problem == '英译汉' || problem == '篇章翻译'">
              
                 <div class="big-box" >
@@ -22,7 +22,7 @@
                   <!-- <div style="height:20px;width:110%;background-color: #F8F8F8;margin:10px 0;transform: translateX(-30px);"></div> -->
                   <el-button type="primary" @click="submitZuowen(itemOne)">提交</el-button>
                   <!-- 分页插件。 -->
-                  <div  style="float: right;">
+                  <div     style="float: right;">
                     <el-pagination
                       @size-change="handleSizeChange"
                       @current-change="handleCurrentChange"
@@ -524,20 +524,21 @@ export default {
     .tiku{
         width: 100%;
         height: 100%;
-        /* margin-top:70px; */
+         min-height: 100%; 
         .centers{
             width: 96%;
             margin:0 auto;
         }
     }
     .header{
-        /* color:#808080; */
         margin-top: 20px;
         background-color: #fff;
         padding-left: 10px;
         border-bottom: 2px solid #E6A23C;
     }
     .content-box{
+      background-color: #fff;
+      /* opacity: 0.5; */
       /* max-height: 700px;
       overflow: auto; */
 

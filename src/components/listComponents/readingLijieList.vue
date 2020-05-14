@@ -10,6 +10,11 @@
         <el-table-column prop="test_paper_type_name" label="所属题库">
           <template slot-scope="scope">{{tesPaperTypeName(scope.row.test_paper_type_name)}}</template>
         </el-table-column>
+        <el-table-column prop="test_paper_type_name" label="所属题库">
+          <template slot-scope="scope">
+            <el-button type="primary" @click="look(scope.row)">查看详情</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
 
@@ -23,6 +28,14 @@
         :total="tableData.length"
       ></el-pagination>
     </div>
+
+    <!-- 查看详情的对话框 -->
+
+    <el-dialog title="问题" :visible.sync="dialogVisible" width="50%">
+         <div  v-html="lookData.duanwen" style="padding:10px;margin:5px 0;box-sizing:border-box"></div>
+         <div  v-html="lookData.cankaodaan" style="padding:10px;margin:10px 0;box-sizing:border-box"></div>
+         <!-- <div></div> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -33,10 +46,15 @@ export default {
   props: ["paperId", "paperName"],
   data() {
     return {
+      dialogVisible:false,
       tableData: [],
       isLoading: false,
       pagesize: 15,
       currentPage: 1,
+      lookData:{
+        duanwen:'',
+        cankaodaan:'',
+      }
     };
   },
   created() {
@@ -47,6 +65,13 @@ export default {
   },
   computed: {},
   methods: {
+    look(val){
+      this.dialogVisible=true
+      this.lookData.cankaodaan=val.cankaodaan
+      this.lookData.duanwen=val.duanwen
+        console.log(val);
+        
+    },
     handleSizeChange(val) {
       this.pagesize = val;
     },

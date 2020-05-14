@@ -35,7 +35,8 @@
 export default {
   data() {
     return {
-        identId: '',
+        identId:'',
+        // 手机号
         username:'',
         password:'',
         province:'',
@@ -75,11 +76,13 @@ export default {
      console.log(res,333);
      if( res.status==200 && res.data.code==1){
            console.log(res);
+          //  1为学生
       if(this.type==1){
         localStorage.setItem('identity',1)
         localStorage.setItem('phone',this.username)
           this.$router.push('/stuwelcome')
       }
+      // 2位老师
        if(this.type==2){
         localStorage.setItem('identity',2)
         localStorage.setItem('phone',this.username)

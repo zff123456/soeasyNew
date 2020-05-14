@@ -32,8 +32,8 @@
             </div>
             <!-- 新增班级 -->
             <div class="xzbj">
-                <el-dialog  title="新增班级"   :visible.sync="dialogVisible2"  width="30%"   >
-                    <el-form ref="form" :model="addClassForm" label-width="80px">                     
+                <el-dialog  title="新增班级"   :visible.sync="dialogVisible2"  width="30%"    @close="addDialogClose('addClassForm')" >
+                    <el-form ref="addClassForm" :model="addClassForm" label-width="80px">                     
                         <el-form-item label="班级名称">
                             <el-input style="width: 80%;" v-model="addClassForm.className" placeholder="请输入班级名称"></el-input>
                         </el-form-item>
@@ -81,7 +81,7 @@
                 <el-button @click="dialogVisible2=true" type="primary"   style="color:#fff;margin-left:30px;border-radius: 20px;border: none;">新增班级</el-button> 
             </div>
             <!-- <div style="width: 100%;height:20px;background:#EFF1F5 "></div> -->
-            <el-table  style="width: 100%;"   @selection-change="handleSelectionChange"  :data="myClassList" border  stripe :header-cell-style="getRowClass">
+            <el-table  style="width: 100%;"   @selection-change="handleSelectionChange"  :data="myClassList"    border  stripe :header-cell-style="getRowClass">
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column prop="class_name"  label="班级名称"  align="center" color="#000"> </el-table-column>
                 <el-table-column  prop="teacher_name" label="教师姓名"   align="center"> </el-table-column>
@@ -130,23 +130,10 @@
                 </span>
               </el-dialog>
          </div> 
-            <!--删除信息的对话框-->
-            <!-- <div class="xzbj1">
-                <el-dialog  title="删除学生"  :visible.sync="dialogVisible4" width="30%"  >
-                    <span>确定删除吗？删除后将不可恢复</span>
-                    <span slot="footer" class="dialog-footer">
-                  <el-button style="background: #C0C0C0;border: none;border-radius: 20px" @click="dialogVisible4 = false">取 消</el-button>
-                  <el-button style="background: #FED467;border: none;border-radius: 20px" @click="removeStudent">确 定</el-button>
-                </span>
-                </el-dialog>
-            </div> -->
-
             <!-- 分页插件。 -->
             <div style="float:right;padding-top:5px">
-                <el-pagination  @size-change="handleSizeChange"  
-                                @current-change="handleCurrentChange" :page-size="pagesize"
-                                layout="total, prev, pager, next,jumper"
-                                :total="total" >
+                <el-pagination  @size-change="handleSizeChange"  @current-change="handleCurrentChange"
+                :page-size="pagesize"  layout="total, prev, pager, next,jumper"  :total="total">
                 </el-pagination>
             </div>
 
@@ -257,7 +244,7 @@
                 dialogVisible2: false,
                 dialogVisible3: false,
                input:"",
-                   // 修改班级的信息 
+                // 修改班级的信息 
               editStudentForm:{
                 className:'',
                 teachName:'',
@@ -272,7 +259,7 @@
            },  
                one_id:'',
                 value: '',
-                multipleSelection:[],
+             multipleSelection:[],
                school_name:'',
                school_id:'',
                teacherName:'',
@@ -283,6 +270,17 @@
             }
         },
         methods: {
+            // 监听新增班级对话框的关闭事件
+            addDialogClose(formName){
+                // console.log(formName)    
+                // this.$refs[formName].resetFields()       
+                // console.log(this.$refs[formName].resetFields());
+                this.addClassForm={
+                    className:'',
+                    people:'',
+                    state:''                  
+                }
+            },
             // 新增班级
         async  addClass(){
                 console.log( this.addClassForm.state,this.addClassForm.className,this.addClassForm.people);

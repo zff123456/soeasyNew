@@ -143,17 +143,17 @@ export default {
 
 <style scoped lang="less">
 .lianxi{
-    padding-top: 80px;
+    padding-top: 61px;
     min-height: 100%;
    /* padding-bottom:50px; */
     /* background:url(../../assets/image/creatshijuan/bg.png) no-repeat; */
     width:100%;
     height:100%;
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat;
     background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
-    background-position: center 0;
+    background-position: center 0; */
     overflow:auto;
     .centers{
       width: 96%;

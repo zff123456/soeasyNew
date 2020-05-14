@@ -3,22 +3,16 @@
   <div class="right" v-loading="isLoading" element-loading-text="拼命加载中">
     <div class="table-box">
       <el-table style="width: 100%" border="" stripe :data="flatten(tableData.slice((currentPage -1) * pagesize, currentPage * pagesize))" :row-style="{height:'48px'}"  :header-row-style="{height:'48px'}">
-        <el-table-column prop="id" label="Id" width="65"></el-table-column>
-        <el-table-column prop="test_paper_name" label="试卷名称" >
+        <el-table-column prop="id" label="Id" width="65"  align="center"></el-table-column>
+        <el-table-column prop="test_paper_name" label="试卷名称"  align="center">
           <template slot-scope="scope">{{testPaperName(scope.row.test_paper_name)}}</template>
         </el-table-column>
-        <el-table-column prop="test_paper_type_name" label="所属题库" >
+        <el-table-column prop="test_paper_type_name" label="所属题库" align="center" >
           <template slot-scope="scope">{{tesPaperTypeName(scope.row.test_paper_type_name)}}</template>
         </el-table-column>
-        <el-table-column prop="duanwen" label="题目"  width="120">
+        <el-table-column prop="duanwen" label="操作"  width="120"   align="center">
           <template slot-scope="scope">
-            <el-popover   placement="left-start"     width="500"   trigger="click">
-              <div v-html="scope.row.duanwen"> </div>
-                <el-button slot="reference"  type="primary">点击查看</el-button>
-              </el-popover>
-            <!--  <el-popover  placement="left-start" title="题目" width="500" trigger="hover" :content="blockLize(scope.row)">
-                  <el-button slot="reference" size="small" type="text">题目</el-button>
-            </el-popover> -->
+            <el-button size="mini"  type="primary" @click="look(scope.row)">查看详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -34,6 +28,13 @@
         :total="tableData.length"
       ></el-pagination>
     </div>
+
+    <!-- 查看详情的对话框 -->
+    <el-dialog   title="问题列表"  :visible.sync="dialogVisible"   width="50%">
+           <div v-html="lookData.duanwen"   style="padding:10px;box-sizing:border-box"></div>
+           <div v-html="lookData.daan"   style="margin:10px 0;padding:10px;box-sizing:border-box" ></div>
+           <div v-html="lookData.yiwen"   style="margin:10px 0;padding:10px;box-sizing:border-box" ></div>
+ </el-dialog>
   </div>
 </template>
 
@@ -44,6 +45,12 @@ export default {
   props: ["paperId", "paperName"],
   data() {
     return {
+      dialogVisible:false,
+      lookData:{
+        duanwen:'',
+        daan:'',
+        yiwen:'',
+      },
       tableData: [],
       isLoading: false,
       pagesize: 15,
@@ -58,6 +65,12 @@ export default {
   },
   computed: {},
   methods: {
+    look(val){
+      this.dialogVisible=true
+      this.lookData.duanwen=val.duanwen
+      this.lookData.daan=val.daan
+      this.lookData.yiwen=val.yiwen
+    },
     blockLize(e){
         return `${e.duanwen}`;
       },
