@@ -14,7 +14,7 @@
     "file-saver": "^2.0.2",
     "moment": "^2.24.0",
     "print-js": "^1.0.63",
-    "qs": "^6.9.3",
+    "qs": "^6.9.7",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.0",
     "vue-concise-slider": "^3.4.4",
